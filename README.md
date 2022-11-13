@@ -14,7 +14,9 @@ Helper package to interact with the Planetside 2 Census service by Daybreak Game
     - MetagameEvent
     - MetagameEventState
 - Useful Data
-    - ZoneEvents list
+    - ZoneEvents list*
+
+*Might delete the `ZoneEvents` list in the future, as it's easy enough to get directly from the Census API. Only new data it adds is the `ZoneID` where derived from the event name.
 
 ## Requirements
 
