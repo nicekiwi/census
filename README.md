@@ -1,5 +1,7 @@
 # Census
 
+[![Build Status](https://app.travis-ci.com/nicekiwi/census.svg?branch=main)](https://app.travis-ci.com/nicekiwi/census)
+
 Helper package to interact with the Planetside 2 Census service by Daybreak Game Company.
 
 - Steam events from the Census Websocket API
