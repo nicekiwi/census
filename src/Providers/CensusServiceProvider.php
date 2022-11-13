@@ -12,13 +12,19 @@ final class CensusServiceProvider extends ServiceProvider
 {
     public function boot(): void
     {
-        $this->publishes([
-            __DIR__ . '/../config/census.php' => config_path('census.php'),
-        ]);
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                __DIR__ . '/../../config/census.php' => config_path('census.php'),
+            ], 'census-config');
+        }
     }
 
     public function register()
     {
+        $this->mergeConfigFrom(
+            __DIR__ . '/../../config/census.php', 'census'
+        );
+
         $this->app->bind('api-client', function($app) {
             return new ApiClient();
         });

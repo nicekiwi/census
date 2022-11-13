@@ -35,7 +35,7 @@
           "Nicekiwi\\Census\\Providers\\CensusServiceProvider"
         ],
         "aliases": {
-          "ApiCilent": "Nicekiwi\\Census\\Facades\\ApiCilent",
+          "ApiClient": "Nicekiwi\\Census\\Facades\\ApiClient",
           "StreamClient": "Nicekiwi\\Census\\Facades\\StreamClient"
         }
       }

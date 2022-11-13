@@ -26,7 +26,7 @@ composer require nicekiwi/census
 ```
 #### Publish config
 ```
-php artisan vendor:publish --provider="Nicekiwi\Census\CensusServiceProvider"
+php artisan vendor:publish --provider="Nicekiwi\Census\Providers\CensusServiceProvider"
 ```
 
 #### Add Service ID to .env
