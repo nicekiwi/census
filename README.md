@@ -14,13 +14,24 @@ Helper package to interact with the Planetside 2 Census service by Daybreak Game
 - Useful Data
     - ZoneEvents list
 
+## Requirements
+
+- PHP 8.1
+- Laravel 9
+- [Service ID](https://census.daybreakgames.com/#devSignup) from Daybreak Game Company
+
 ## Installation
 ```
 composer require nicekiwi/census
 ```
-### Publish config
+#### Publish config
 ```
 php artisan vendor:publish --provider="Nicekiwi\Census\CensusServiceProvider"
+```
+
+#### Add Service ID to .env
+```
+CENSUS_SERVICE_ID=your-service-id
 ```
 
 ## Usage
@@ -31,9 +42,10 @@ Stream kills from all worlds on the PC platform.
 
 ```php
 use Nicekiwi\Census\StreamClient;
+use Nicekiwi\Census\Enums\Platform;
 use Nicekiwi\Census\Enums\MetagameEvent;
 
-$client = new StreamClient();
+$client = new StreamClient(Platform::PC);
 
 $client->subscribe([MetagameEvent::CHARACTER_DEATH], function($payload, $exception) {
     if ($exception) {
@@ -65,12 +77,13 @@ $client->subscribe([MetagameEvent::CHARACTER_DEATH], function($payload, $excepti
 ```
 
 ### ApiClient
-Query the API for character information.
+Query the API for character information from the PC platform.
 
 ```php
+use Nicekiwi\Census\Enums\Platform;
 use Nicekiwi\Census\ApiClient;
 
-$client = new ApiClient();
+$client = new ApiClient(Platform::PC);
 
 $ids = ['5428010618020694593'];
 

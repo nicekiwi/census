@@ -3,6 +3,7 @@
 namespace Nicekiwi\Census;
 
 use JsonException;
+use Nicekiwi\Census\Enums\Platform;
 use Nicekiwi\Census\Exceptions\ServiceIdRequiredException;
 use WebSocket\BadOpcodeException;
 use WebSocket\Client;
@@ -22,11 +23,11 @@ class StreamClient
 
     /**
      * Stream constructor.
-     * @param string $platform
+     * @param Platform $platform
      * @param int $timeout
      * @throws ServiceIdRequiredException
      */
-    public function __construct(string $platform = 'ps2', int $timeout = 60)
+    public function __construct(Platform $platform, int $timeout = 60)
     {
         $serviceId = config('services.census.service_id');
         $endpoint = config('services.census.event_endpoint');
@@ -38,7 +39,7 @@ class StreamClient
         $url = sprintf(
             'wss://%s/streaming?environment=%s&service-id=s:%s',
             $endpoint,
-            $platform,
+            $platform->value,
             $serviceId
         );
 

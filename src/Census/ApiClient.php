@@ -23,7 +23,7 @@ class ApiClient
      * @param Format $format
      * @throws ServiceIdRequiredException
      */
-    public function __construct(Platform $platform = Platform::PC, Format $format = Format::JSON)
+    public function __construct(Platform $platform, Format $format = Format::JSON)
     {
         $serviceId = config('services.census.service_id');
 
