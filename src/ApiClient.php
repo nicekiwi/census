@@ -3,7 +3,6 @@
 namespace Nicekiwi\Census;
 
 use Exception;
-use Illuminate\Http\Client\Response;
 use Illuminate\Support\Facades\Http;
 use Nicekiwi\Census\Enums\Format;
 use Nicekiwi\Census\Enums\Platform;
@@ -25,7 +24,7 @@ class ApiClient
      */
     public function __construct(Platform $platform, Format $format = Format::JSON)
     {
-        $serviceId = config('services.census.service_id');
+        $serviceId = config('census.service_id');
 
         if (!$serviceId) {
             throw new ServiceIdRequiredException();
@@ -35,7 +34,7 @@ class ApiClient
 
         $this->baseUrl = sprintf(
             'https://%s/s:%s/get/%s:%s',
-            config('services.census.api_endpoint'),
+            config('census.api_endpoint'),
             $serviceId,
             $platform->value,
             $this->version
@@ -45,10 +44,9 @@ class ApiClient
     /**
      * @throws Exception
      */
-    public function request(string $collection, array $params, bool $validateCollection = true)
+    public function request(string $collection, array $params, bool $validate = true)
     {
-        $url = $this->baseUrl . '/' . $collection;
-        $path = $validateCollection ? $collection . $this->collectionSuffix : null;
+        $url = $this->baseUrl . '/' . $collection . $this->collectionSuffix;
 
         if (array_key_exists('format', $params) && $this->format->value !== $params['format']) {
             $this->format = Format::from($params['format']);
@@ -61,19 +59,17 @@ class ApiClient
         $response = Http::get($url, $params);
 
         if ($this->format === Format::JSON) {
-            return $this->validateJsonResponse($response, $path);
+            return $this->validateJsonResponse($response->json() ?? [], $validate ? $collection : null);
         }
 
-        return $this->validateXmlResponse($response, $path);
+        return $this->validateXmlResponse($response->body(), $validate ? $collection : null);
     }
 
     /**
      * @throws Exception
      */
-    private function validateJsonResponse(Response $response, string|null $collection): mixed
+    private function validateJsonResponse(array $json, string|null $collection): mixed
     {
-        $json = $response->json() ?? [];
-
         if (empty($json)) {
             throw new Exception('Response is empty');
         }
@@ -94,27 +90,24 @@ class ApiClient
     /**
      * @throws Exception
      */
-    private function validateXmlResponse(Response $response, string|null $collection): array|\SimpleXMLElement
+    private function validateXmlResponse(string $body, string|null $collection): ?\SimpleXMLElement
     {
-        $body = $response->body();
-        $xml = simplexml_load_string($body);
+        $xml = simplexml_load_string($body, null, LIBXML_NOCDATA);
 
         if (empty($body) || !$xml) {
             throw new Exception('Response is empty');
         }
 
         if ($collection) {
-            $xmlCollection = $xml->xpath($collection . $this->collectionSuffix);
-
-            if (!$xmlCollection) {
+            if ($xml->getName() !== $collection . $this->collectionSuffix) {
                 throw new CollectionNotFoundException($collection);
             }
 
-            if (!is_array($xmlCollection) || empty($xmlCollection)) {
+            if ($xml->children()->count() === 0) {
                 throw new CollectionEmptyException($collection);
             }
         }
 
-        return $collection ? $xml->xpath($collection . $this->collectionSuffix) : $xml;
+        return $collection ? $xml->children() : $xml;
     }
 }

@@ -1,0 +1,13 @@
+<?php
+
+namespace Nicekiwi\Census\Facades;
+
+use Illuminate\Support\Facades\Facade;
+
+class StreamClient extends Facade
+{
+    protected static function getFacadeAccessor(): string
+    {
+        return 'stream-client';
+    }
+}

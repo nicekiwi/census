@@ -29,8 +29,8 @@ class StreamClient
      */
     public function __construct(Platform $platform, int $timeout = 60)
     {
-        $serviceId = config('services.census.service_id');
-        $endpoint = config('services.census.event_endpoint');
+        $serviceId = config('census.service_id');
+        $endpoint = config('census.event_endpoint');
 
         if (!$serviceId) {
             throw new ServiceIdRequiredException();

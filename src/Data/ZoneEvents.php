@@ -6,7 +6,7 @@ use Nicekiwi\Census\Enums\Zone;
 
 class ZoneEvents
 {
-    static array $list = [
+    public array $list = [
         1 => [
             'name' => "Feeling the Heat",
             'description' => "Capture Indar within the time limit",
@@ -491,6 +491,6 @@ class ZoneEvents
 
     public function getById(int $id): ?array
     {
-        return $this->events[$id] ?? null;
+        return $this->list[$id] ?? null;
     }
 }

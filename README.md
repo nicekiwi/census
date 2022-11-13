@@ -105,4 +105,8 @@ var_dump($detail);
 */
 ```
 
-etc
+## Testing
+
+```
+docker run -w /opt/project -it --rm -v $(pwd):/opt/project nicekiwi/aws_devel composer test
+```
