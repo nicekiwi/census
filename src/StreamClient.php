@@ -58,24 +58,30 @@ class StreamClient
     }
 
     /**
-     * @param $callback
-     * @param array $events
-     * @param array $worlds
-     * @param array $characters
+     * @throws JsonException
      */
-    public function subscribe($callback, array $events, array $worlds = ['all'], array $characters = ['all']): void
+    public function subscribePayload(array $events, array $worlds = ['all'], array $characters = ['all']): string
+    {
+        return json_encode([
+            'service' => 'event',
+            'action' => 'subscribe',
+            'eventNames' => $events,
+            'worlds' => $worlds,
+            'characters' => $characters,
+        ], JSON_THROW_ON_ERROR);
+    }
+
+    /**
+     * @param string $payload
+     * @param $callback
+     */
+    public function subscribe(string $payload, $callback): void
     {
         $this->listen = true;
 
         try {
-            $this->stream->send(json_encode([
-                'service' => 'event',
-                'action' => 'subscribe',
-                'eventNames' => $events,
-                'worlds' => $worlds,
-                'characters' => $characters,
-            ], JSON_THROW_ON_ERROR));
-        } catch (BadOpcodeException | JsonException $e) {
+            $this->stream->send($payload);
+        } catch (BadOpcodeException $e) {
             $callback(null, $e);
             $this->close();
         }
@@ -83,7 +89,7 @@ class StreamClient
         while ($this->listen) {
             try {
                 $callback($this->stream->receive());
-            } catch (ConnectionException | TimeoutException | JsonException $e) {
+            } catch (ConnectionException | TimeoutException $e) {
                 $callback(null, $e);
                 $this->close();
             }

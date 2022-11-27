@@ -47,14 +47,17 @@ use Nicekiwi\Census\Enums\MetagameEvent;
 
 $client = new StreamClient(Platform::PC);
 
-$client->subscribe(function($payload, $exception) {
-    if ($exception) {
-        echo $exception->getMessage();
-        echo $payload;
-    } else {
-        var_dump($payload['attacker_character_id'] . ' killed ' . $payload['character_id']);
+$client->subscribe(
+    $client->subscribePayload([MetagameEvent::CHARACTER_DEATH]), 
+    function($payload, $exception) {
+        if ($exception) {
+            echo $exception->getMessage();
+            echo $payload;
+        } else {
+            var_dump($payload['attacker_character_id'] . ' killed ' . $payload['character_id']);
+        }
     }
-}, [MetagameEvent::CHARACTER_DEATH]);
+);
 
 /*
 [
