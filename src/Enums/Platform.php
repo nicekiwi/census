@@ -17,7 +17,7 @@ enum Platform: string
         };
     }
 
-    public function getWorlds(): array
+    public function getPublicWorlds(): array
     {
         return match($this) {
             self::PC => [
@@ -33,6 +33,32 @@ enum Platform: string
             ],
             self::PS4_EU => [
                 World::CERES,
+            ],
+        };
+    }
+
+    public function getWorlds(): array
+    {
+        return match($this) {
+            self::PC => [
+                World::CONNERY,
+                World::MILLER,
+                World::COBALT,
+                World::EMERALD,
+                World::JAEGER,
+                World::SOLTECH,
+            ],
+            self::PS4_US => [
+                World::GENUDINE,
+                World::PALOS,
+                World::CRUX,
+                World::SEARHUS,
+                World::XELAS,
+            ],
+            self::PS4_EU => [
+                World::CERES,
+                World::LITHCORP,
+                World::RASHNU,
             ],
         };
     }

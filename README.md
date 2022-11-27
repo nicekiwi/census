@@ -13,10 +13,6 @@ Helper package to interact with the Planetside 2 Census service by Daybreak Game
     - Platform
     - MetagameEvent
     - MetagameEventState
-- Useful Data
-    - ZoneEvents list*
-
-*Might delete the `ZoneEvents` list in the future, as it's easy enough to get directly from the Census API. Only new data it adds is the `ZoneID` where derived from the event name.
 
 ## Requirements
 
@@ -51,14 +47,14 @@ use Nicekiwi\Census\Enums\MetagameEvent;
 
 $client = new StreamClient(Platform::PC);
 
-$client->subscribe([MetagameEvent::CHARACTER_DEATH], function($payload, $exception) {
+$client->subscribe(function($payload, $exception) {
     if ($exception) {
         echo $exception->getMessage();
         echo $payload;
     } else {
         var_dump($payload['attacker_character_id'] . ' killed ' . $payload['character_id']);
     }
-});
+}, [MetagameEvent::CHARACTER_DEATH]);
 
 /*
 [

@@ -5,8 +5,8 @@ namespace Nicekiwi\Census;
 use JsonException;
 use Nicekiwi\Census\Enums\Platform;
 use Nicekiwi\Census\Exceptions\ServiceIdRequiredException;
-use WebSocket\BadOpcodeException;
 use WebSocket\Client;
+use WebSocket\BadOpcodeException;
 use WebSocket\ConnectionException;
 use WebSocket\TimeoutException;
 
@@ -48,6 +48,9 @@ class StreamClient
         ]);
     }
 
+    /**
+     * @return void
+     */
     public function close(): void
     {
         $this->listen = false;
@@ -55,11 +58,12 @@ class StreamClient
     }
 
     /**
+     * @param $callback
      * @param array $events
      * @param array $worlds
-     * @param $callback
+     * @param array $characters
      */
-    public function subscribe(array $events, array $worlds, $callback): void
+    public function subscribe($callback, array $events, array $worlds = ['all'], array $characters = ['all']): void
     {
         $this->listen = true;
 
@@ -67,8 +71,9 @@ class StreamClient
             $this->stream->send(json_encode([
                 'service' => 'event',
                 'action' => 'subscribe',
-                'worlds' => empty($worlds) ? ['all'] : $worlds,
-                'eventNames' => $events
+                'eventNames' => $events,
+                'worlds' => $worlds,
+                'characters' => $characters,
             ], JSON_THROW_ON_ERROR));
         } catch (BadOpcodeException | JsonException $e) {
             $callback(null, $e);
@@ -77,36 +82,11 @@ class StreamClient
 
         while ($this->listen) {
             try {
-                $response = $this->stream->receive();
-                $cleanResponse = $this->cleanResponse($response);
-
-                if ($cleanResponse) {
-                    $callback($cleanResponse, null);
-                }
+                $callback($this->stream->receive());
             } catch (ConnectionException | TimeoutException | JsonException $e) {
                 $callback(null, $e);
                 $this->close();
             }
         }
-    }
-
-    /**
-     * @param string $payload
-     * @return mixed|null
-     * @throws JsonException
-     */
-    private function cleanResponse(string $payload): mixed
-    {
-        $data = json_decode($payload, true, 512, JSON_THROW_ON_ERROR);
-
-        if (array_key_exists('type', $data) &&
-            array_key_exists('payload', $data) &&
-            $data['type'] === 'serviceMessage' &&
-            $data['payload'] !== null
-        ) {
-            return $data['payload'];
-        }
-
-        return null;
     }
 }
