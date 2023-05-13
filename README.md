@@ -1,6 +1,6 @@
 # Census
 
-![Unit Tests](https://github.com/nicekiwi/census/actions/workflows/tests.yml/badge.svg)
+[![Unit Tests](https://github.com/nicekiwi/census/actions/workflows/tests.yml/badge.svg)](https://github.com/nicekiwi/census/actions/workflows/tests.yml)
 
 Helper package to interact with the Planetside 2 Census service by Daybreak Game Company.
 
