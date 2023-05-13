@@ -9,6 +9,8 @@ enum World: int
     case COBALT = 13;
     case EMERALD = 17;
     case JAEGER = 19;
+    case APEX = 24;
+    case BRIGGS = 25;
     case SOLTECH = 40;
     case GENUDINE = 1000;
     case PALOS = 1001;
@@ -27,6 +29,8 @@ enum World: int
             self::COBALT => 'Cobalt',
             self::EMERALD => 'Emerald',
             self::JAEGER => 'Jaeger',
+            self::APEX => 'Apex',
+            self::BRIGGS => 'Briggs',
             self::SOLTECH => 'SolTech',
             self::GENUDINE => 'Genudine',
             self::PALOS => 'Palos',
@@ -42,7 +46,7 @@ enum World: int
     public function getRegion(): WorldRegion
     {
         return match($this) {
-            self::CONNERY, self::MILLER, self::COBALT, self::EMERALD, self::JAEGER, self::GENUDINE, self::PALOS, self::CRUX, self::SEARHUS, self::XELAS => WorldRegion::US,
+            self::BRIGGS, self::APEX, self::CONNERY, self::MILLER, self::COBALT, self::EMERALD, self::JAEGER, self::GENUDINE, self::PALOS, self::CRUX, self::SEARHUS, self::XELAS => WorldRegion::US,
             self::CERES, self::LITHCORP, self::RASHNU => WorldRegion::EU,
             self::SOLTECH => WorldRegion::JP,
         };
@@ -51,7 +55,7 @@ enum World: int
     public function getPlatform(): Platform
     {
         return match($this) {
-            self::CONNERY, self::MILLER, self::COBALT, self::EMERALD, self::JAEGER, self::SOLTECH => Platform::PC,
+            self::BRIGGS, self::APEX, self::CONNERY, self::MILLER, self::COBALT, self::EMERALD, self::JAEGER, self::SOLTECH => Platform::PC,
             self::GENUDINE, self::PALOS, self::CRUX, self::SEARHUS, self::XELAS => Platform::PS4_US,
             self::CERES, self::LITHCORP, self::RASHNU => Platform::PS4_EU,
         };

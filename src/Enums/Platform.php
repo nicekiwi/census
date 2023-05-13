@@ -47,6 +47,8 @@ enum Platform: string
                 World::EMERALD,
                 World::JAEGER,
                 World::SOLTECH,
+                World::APEX,
+                World::BRIGGS,
             ],
             self::PS4_US => [
                 World::GENUDINE,

@@ -19,7 +19,7 @@ final class CensusServiceProvider extends ServiceProvider
         }
     }
 
-    public function register()
+    public function register(): void
     {
         $this->mergeConfigFrom(
             __DIR__ . '/../../config/census.php', 'census'
