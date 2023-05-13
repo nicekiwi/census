@@ -1,6 +1,6 @@
 # Census
 
-[![Build Status](https://app.travis-ci.com/nicekiwi/census.svg?branch=main)](https://app.travis-ci.com/nicekiwi/census)
+![Unit Tests](https://github.com/nicekiwi/census/actions/workflows/tests.yml/badge.svg)
 
 Helper package to interact with the Planetside 2 Census service by Daybreak Game Company.
 
