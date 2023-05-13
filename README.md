@@ -16,8 +16,8 @@ Helper package to interact with the Planetside 2 Census service by Daybreak Game
 
 ## Requirements
 
-- PHP 8.1
-- Laravel 9
+- PHP 8.2
+- Laravel 10
 - [Service ID](https://census.daybreakgames.com/#devSignup) from Daybreak Game Company
 
 ## Installation
@@ -111,5 +111,5 @@ var_dump($detail);
 ## Testing
 
 ```
-docker run -w /opt/project -it --rm -v $(pwd):/opt/project nicekiwi/aws_devel composer test
+composer test
 ```
